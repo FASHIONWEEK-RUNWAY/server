@@ -111,12 +111,6 @@ public class TokenProvider implements InitializingBean {
         Long userId=claims.getBody().get("userId",Long.class);
 
         Optional<User> users=userRepository.findById(userId);
-        String userName = users.get().getUsername();
-
-        System.out.println(users.get().getAuthorities());
-
-
-
         return new UsernamePasswordAuthenticationToken(users.get(),"",users.get().getAuthorities());
     }
 
