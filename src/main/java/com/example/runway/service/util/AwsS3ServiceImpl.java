@@ -36,10 +36,27 @@ public class AwsS3ServiceImpl implements AwsS3Service{
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Value("${cloud.aws.s3.url}")
+    @Value("${cloud.front.url}")
     private String url;
 
     private final AmazonS3 amazonS3;
+
+    public String upload(MultipartFile multipartFile,String dirName) throws ForbiddenException, IOException {
+        String fileName = dirName+"/"+UUID.randomUUID().toString() + ".jpg";
+
+        //MultipartFile resizeFile=resizeImage(fileName,multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1),multipartFile,600);
+
+        byte[] bytes = multipartFile.getBytes();
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType("image/jpeg");
+        metadata.setContentLength(bytes.length);
+        amazonS3.putObject(bucket, fileName, byteArrayInputStream, metadata);
+
+        return getImageUrl(fileName);
+    }
 
 
     @Override
@@ -52,7 +69,7 @@ public class AwsS3ServiceImpl implements AwsS3Service{
 
         amazonS3.putObject(new PutObjectRequest(bucket,s3FileName,new ByteArrayInputStream(bytes),metadata));
 
-        return amazonS3.getUrl(bucket,s3FileName).toString();
+        return getImageUrl(s3FileName);
     }
 
 
@@ -82,7 +99,7 @@ public class AwsS3ServiceImpl implements AwsS3Service{
 
             amazonS3.putObject(new PutObjectRequest(bucket,fileName,new ByteArrayInputStream(bytes),objectMetadata));
 
-            fileNameList.add(amazonS3.getUrl(bucket,fileName).toString());
+            fileNameList.add(getImageUrl(fileName));
         });
 
         return fileNameList;
@@ -205,6 +222,10 @@ public class AwsS3ServiceImpl implements AwsS3Service{
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
+    private String getImageUrl(String fileName){
+        return url + "/" + fileName;
+    }
+
     public String createFileNames(String fileName) throws ForbiddenException {
         // Check if the provided fileName has a valid extension
         String fileExtension = getFileExtension(fileName);
@@ -212,7 +233,6 @@ public class AwsS3ServiceImpl implements AwsS3Service{
             throw new ForbiddenException(WRONG_FORMAT_FILE);
         }
 
-        // Generate a unique filename with jpg extension
         return UUID.randomUUID().toString() + ".jpg";
     }
 
@@ -229,26 +249,12 @@ public class AwsS3ServiceImpl implements AwsS3Service{
         String[] validExtensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".heic", ".heic의 사본"};
 
         for (String extension : validExtensions) {
-            if (extension.equalsIgnoreCase(fileExtension)){
-                System.out.println(fileExtension);
+            if (extension.equalsIgnoreCase(fileExtension)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    public byte[] convertToJpg(byte[] imageData) throws IOException {
-        ByteArrayInputStream input = new ByteArrayInputStream(imageData);
-        BufferedImage image = ImageIO.read(input);
-
-        // Create a ByteArrayOutputStream to store the jpg image
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        // Write the image as jpg to the ByteArrayOutputStream
-        ImageIO.write(image, "jpg", output);
-
-        return output.toByteArray();
     }
 
     public List<String> uploadImages(List<MultipartFile> multipartFile, String dirName) {
@@ -276,7 +282,7 @@ public class AwsS3ServiceImpl implements AwsS3Service{
 
             amazonS3.putObject(new PutObjectRequest(bucket, fileName, new ByteArrayInputStream(bytes), objectMetadata));
 
-            fileNameList.add(amazonS3.getUrl(bucket, fileName).toString());
+            fileNameList.add(getImageUrl(fileName));
         });
 
         return fileNameList;
