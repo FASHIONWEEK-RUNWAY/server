@@ -19,7 +19,8 @@ public class WebConfig implements WebMvcConfigurer {
 				"http://localhost:3000",
 				"http://localhost:8080",
 				"http://localhost:9000",
-				"https://runway-admin-git-master-team-runway.vercel.app"
+				"https://runway-admin-git-master-team-runway.vercel.app",
+				"https://runway-admin.vercel.app"
 			)
 			// 모든 HTTP Method를 허용한다.
 			.allowedMethods("*", "PUT", "POST", "DELETE", "OPTIONS", "PATCH", "GET")
