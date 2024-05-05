@@ -69,14 +69,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 
-            .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v3/api-docs").permitAll()
                 .antMatchers("/test/img").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/health").permitAll()
-                .antMatchers("/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/admin/users/info").hasAnyRole("ADMIN")
                 .antMatchers("/admin/users/logIn").permitAll()
 
             .anyRequest().authenticated()
