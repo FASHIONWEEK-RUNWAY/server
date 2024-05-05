@@ -49,8 +49,6 @@ public class LoginController {
         log.info("post-signup");
         log.info("api = signup 01-01");
 
-        System.out.println(signupUser.getCategoryList());
-
         if(signupUser.getCategoryList()==null) throw new BadRequestException(CATEGORY_EMPTY_USERS);
         if(signupUser.getPassword()==null) throw new BadRequestException(USERS_EMPTY_USER_PASSWORD);
         if(signupUser.getPhone()==null) throw new BadRequestException(USERS_EMPTY_USER_ID);

@@ -130,4 +130,13 @@ public class UserConvertor {
     public static Social SyncSocial(String socialId, Long userId, String social) {
         return Social.builder().socialId(socialId).userId(userId).type(social).build();
     }
+
+    public static UserRes.DashBoardDto ConvertUserSignUpInfo(Long oneDayUser, Long weekUser, Long monthUser, Long totalUser) {
+        return UserRes.DashBoardDto.builder()
+                .totalUserCnt(totalUser)
+                .oneDayUserCnt(oneDayUser)
+                .weekUserCnt(weekUser)
+                .monthUserCnt(monthUser)
+                .build();
+    }
 }

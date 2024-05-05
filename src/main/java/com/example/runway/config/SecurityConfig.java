@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.web.cors.CorsUtils;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -67,7 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/swagger-resources/**").permitAll()
+            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+
+            .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v3/api-docs").permitAll()
@@ -75,7 +77,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/health").permitAll()
                 .antMatchers("/admin").hasAnyRole("ADMIN")
-                .anyRequest().authenticated()
+            .antMatchers("/admin/user/logIn").permitAll()
+
+            .anyRequest().authenticated()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));

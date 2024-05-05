@@ -6,6 +6,8 @@ import java.util.List;
 public final class Constants {
     public static final String kakao="KAKAO";
     public static final String apple="APPLE";
+    public static final String FIRST_TIME = "T00:00:00";
+    public static final String LAST_TIME = "T23:59:59";
     public static final List<String> CATEGORY=new ArrayList<>(){
         {
         add("페미닌");

@@ -314,4 +314,25 @@ public class UserRes {
         private List<String> categoryList;
 
     }
+
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+	public static class DashBoardDto {
+        private Long totalUserCnt;
+        private Long oneDayUserCnt;
+        private Long weekUserCnt;
+        private Long monthUserCnt;
+	}
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+	public static class UserInfoDto {
+	}
 }

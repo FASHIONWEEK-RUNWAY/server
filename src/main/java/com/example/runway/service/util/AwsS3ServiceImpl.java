@@ -116,42 +116,6 @@ public class AwsS3ServiceImpl implements AwsS3Service{
         }
     }
 
-    /*
-
-    MultipartFile resizeImage(String fileName, String fileFormatName, MultipartFile originalImage, int targetWidth) {
-        try {
-            // MultipartFile -> BufferedImage Convert
-            BufferedImage image = ImageIO.read(originalImage.getInputStream());
-            // newWidth : newHeight = originWidth : originHeight
-            int originWidth = image.getWidth();
-            int originHeight = image.getHeight();
-
-            // origin 이미지가 resizing될 사이즈보다 작을 경우 resizing 작업 안 함
-            if(originWidth < targetWidth)
-                return originalImage;
-
-            MarvinImage imageMarvin = new MarvinImage(image);
-
-            Scale scale = new Scale();
-            scale.load();
-            scale.setAttribute("newWidth", targetWidth);
-            scale.setAttribute("newHeight", targetWidth * originHeight / originWidth);
-            scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
-
-            BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(imageNoAlpha, fileFormatName, baos);
-            baos.flush();
-
-            return new CustomMultipartFile(fileName,fileFormatName, originalImage.getContentType() ,baos.toByteArray());
-
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 리사이즈에 실패했습니다.");
-        }
-    }
-
-     */
-
 
     private static class CustomMultipartFile implements MultipartFile {
         private final String name;
