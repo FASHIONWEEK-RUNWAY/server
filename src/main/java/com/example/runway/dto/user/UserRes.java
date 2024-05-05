@@ -334,5 +334,6 @@ public class UserRes {
     @AllArgsConstructor
     @NoArgsConstructor
 	public static class UserInfoDto {
+        private int userId;
 	}
 }
